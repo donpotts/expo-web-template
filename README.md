@@ -97,6 +97,10 @@ If `public/CNAME` exists (written by `new-site.js` when you give it a domain), E
 
 There is no CI/CD here by design — deploying is always a manual, local `npm run deploy`.
 
+### One-command redeploy from the CLI
+
+`./redeploy.ps1` (PowerShell) wraps the above for quick manual testing: it runs `npm run deploy` and opens the live URL in your browser. Pass `-InitRepo` the very first time for a brand-new project (no GitHub repo yet) — it initializes git, creates the GitHub repo via `gh repo create`, pushes `main`, then deploys. On later runs, just `./redeploy.ps1`.
+
 ## Icons, splash, and favicon
 
 Placeholder assets live in `assets/`:
