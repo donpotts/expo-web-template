@@ -43,6 +43,12 @@ Kept because the page structure actively uses them: `expo-router`, `react-native
 
 Intentionally dropped (existed in the site this template was generalized from, but unused): `expo-camera`, `expo-blur`, `expo-haptics`, `expo-linear-gradient`, `expo-symbols`, `expo-web-browser`, `expo-font`, `react-native-webview`. Don't re-add these "for completeness" — only add a package back when a specific feature actually needs it.
 
+## Scope: static frontend only, backend/native are separate concerns
+
+This repo deploys a static site (no server code, no database). If a future task here involves "add a contact form that saves to a database," "add login," or similar, that needs a separately hosted backend — don't try to run server code on GitHub Pages, it only serves static files. Point the app at an API via an `EXPO_PUBLIC_*` env var rather than hardcoding a URL in `site.config.ts`. Suggested hosts for that API (not opinionated, just common defaults to suggest if asked): Azure App Service or Container Apps for a conventional API, Azure Functions for a few small endpoints, or any other host (Render, Fly.io, a VPS). CORS needs to allow the site's origin since they'd be on different domains.
+
+Because this is a genuine Expo project (not web-only), `app/` and `site.config.ts` also work unmodified as iOS/Android apps via `npm run ios`/`npm run android` and EAS Build — no native-specific setup exists in this template today, but nothing about the current structure blocks adding it later.
+
 ## Placeholder assets
 
 `assets/icon.png`, `assets/adaptive-icon.png`, `assets/splash-icon.png`, `assets/favicon.png` are programmatically generated flat-color placeholders (not real branding) — expected to be replaced per-site. `src/images/hero-*.jpg` are generated placeholder photos, not licensed stock photography — also expected to be replaced.

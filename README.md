@@ -107,6 +107,21 @@ Placeholder assets live in `assets/`:
 
 Replace these files (same filenames) with your own branding.
 
+## Beyond a static site — pairing with a backend, or going native
+
+This template itself is **static only** — `npm run deploy` publishes plain HTML/JS/images to GitHub Pages, there's no server code and no database. That's fine for a marketing/informational site, but the same codebase can grow in two directions without changing how this repo deploys:
+
+**Add a backend API.** If a page needs to read/write data (a contact form, a CMS, auth, etc.), host that as a *separate* service and call it from the site with `fetch()` — GitHub Pages only ever serves static files, it can't run server code itself. Common places to host that API:
+
+- **Azure App Service** — simplest for a conventional Node/.NET/Python/Java API, supports containers or direct code deploy.
+- **Azure Container Apps** — if the API is already a Docker image, or needs to scale to zero.
+- **Azure Functions** — serverless, pay-per-call, good fit for a handful of small endpoints (e.g. a contact-form handler) rather than a full API.
+- Any other host works too (Render, Fly.io, Railway, a VPS, etc.) — nothing here is Azure-specific.
+
+Practical notes: expose the API's base URL to the app via an `EXPO_PUBLIC_`-prefixed env var (Expo inlines these at build time — e.g. `EXPO_PUBLIC_API_URL`) rather than hardcoding it in `site.config.ts`, since it'll likely differ between local dev and production. Since the site and API are served from different origins (GitHub Pages vs. wherever the API lives), the API needs to send CORS headers allowing the site's domain.
+
+**Build the native apps.** Because this is a real Expo project (not a web-only framework), the exact same `app/` routes and `site.config.ts` content also run as iOS and Android apps — `npm run ios` / `npm run android` in Expo Go during development, and [EAS Build](https://docs.expo.dev/build/introduction/) for real App Store/Play Store binaries. They'd talk to the same backend API described above. This template doesn't set up EAS or native builds by default — it's just worth knowing the door is open without a rewrite.
+
 ## Why some Expo packages are missing
 
 This template excludes native-feature packages like `expo-camera`, `expo-blur`, `expo-haptics`, `expo-linear-gradient`, `expo-symbols`, `expo-web-browser`, `expo-font`, and `react-native-webview`, since none of them are used by the pages. `expo-router`, `react-native-screens`, and `react-native-safe-area-context` *are* included — they power the multi-page navigation. Add other packages back in via `npm install` if you extend the site with features that need them — see the [Expo docs](https://docs.expo.dev/) for setup.
