@@ -2,7 +2,11 @@
   "expo": {
     "name": "Expo Web Template",
     "slug": "expo-web-template",
-    "platforms": ["ios", "android", "web"],
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
     "version": "1.0.0",
     "sdkVersion": "54.0.0",
     "icon": "./assets/icon.png",
@@ -11,9 +15,14 @@
       "backgroundColor": "#ffffff",
       "resizeMode": "contain"
     },
+    "scheme": "expo-web-template",
     "web": {
       "bundler": "metro",
+      "output": "single",
       "favicon": "./assets/favicon.png"
+    },
+    "experiments": {
+      "baseUrl": "/expo-web-template"
     },
     "android": {
       "adaptiveIcon": {
@@ -21,6 +30,11 @@
         "backgroundColor": "#ffffff"
       }
     },
-    "assetBundlePatterns": ["**/*"]
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "plugins": [
+      "expo-router"
+    ]
   }
 }

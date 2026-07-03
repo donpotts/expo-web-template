@@ -74,6 +74,9 @@ async function main() {
   const slug = slugify(await ask('Slug (url-safe)', suggestedSlug));
   const tagline = await ask('Tagline', 'A short tagline describing what this site is about.');
   const domain = await ask('Custom domain for GitHub Pages (blank to skip)', '');
+  const repoName = domain
+    ? slug
+    : slugify(await ask('GitHub repo name (for the /repo-name/ Pages subpath, since no domain was given)', slug));
   const heroTitle = await ask('Hero title', `Welcome to ${siteName}`);
   const heroSubtitle = await ask('Hero subtitle', 'A short, punchy line about what you do and who it helps.');
   const aboutBody = await ask(
@@ -114,6 +117,9 @@ async function main() {
   const appJson = JSON.parse(readFile(APP_JSON_PATH));
   appJson.expo.name = siteName;
   appJson.expo.slug = slug;
+  appJson.expo.scheme = slug;
+  appJson.expo.experiments = appJson.expo.experiments || {};
+  appJson.expo.experiments.baseUrl = domain ? '' : `/${repoName}`;
   writeFile(APP_JSON_PATH, JSON.stringify(appJson, null, 2) + '\n');
 
   // --- public/CNAME ---
@@ -125,6 +131,7 @@ async function main() {
   }
 
   console.log('\nDone! Updated site.config.ts, package.json, app.json' + (domain ? ', public/CNAME' : '') + '.');
+  console.log(domain ? 'Base path: "" (custom domain, served from root).' : `Base path: "/${repoName}" (GitHub Pages project subpath).`);
 
   if (runInstall) {
     const { execSync } = require('child_process');
@@ -139,6 +146,9 @@ async function main() {
   if (domain) {
     console.log(`\nRemember to point your DNS for ${domain} at GitHub Pages and enable the`);
     console.log('custom domain in your repo\'s GitHub Pages settings.');
+  } else {
+    console.log(`\nMake sure your GitHub repo is actually named "${repoName}" — the base path`);
+    console.log('baked into app.json must match the repo name for asset URLs to resolve.');
   }
   console.log('\nNote: this script is safe to re-run, but only before you start hand-editing');
   console.log('site.config.ts further — after that, edit the file directly.');
