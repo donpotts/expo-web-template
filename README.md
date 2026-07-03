@@ -99,7 +99,7 @@ There is no CI/CD here by design — deploying is always a manual, local `npm ru
 
 ### One-command redeploy from the CLI
 
-`./redeploy.ps1` (PowerShell) wraps the above for quick manual testing: it runs `npm run deploy` and opens the live URL in your browser. Pass `-InitRepo` the very first time for a brand-new project (no GitHub repo yet) — it initializes git, creates the GitHub repo via `gh repo create`, pushes `main`, then deploys. On later runs, just `./redeploy.ps1`.
+`./redeploy.sh` (macOS/Linux/Git Bash) or `redeploy.bat` (Windows cmd) wraps the above for quick manual testing: it runs `npm run deploy` and opens the live URL in your browser. Pass `-InitRepo` the very first time for a brand-new project (no GitHub repo yet) — it initializes git, creates the GitHub repo via `gh repo create`, pushes `main`, then deploys. On later runs, just run it with no arguments.
 
 ## Icons, splash, and favicon
 
